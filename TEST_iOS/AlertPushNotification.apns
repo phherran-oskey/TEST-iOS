@@ -1,0 +1,13 @@
+{
+    "Simulator Target Bundle": "com.phtest.TEST-iOS",
+    "aps" : {
+       "alert" : {
+            "title" : "All Hands",
+            "body" : "Amos has joined the meeting"
+        },
+        "sound" : "default",
+        "badge" : 10,
+   },
+    "duration": "Current time",
+    "startedAt": "Meeting’s starting time"
+}
