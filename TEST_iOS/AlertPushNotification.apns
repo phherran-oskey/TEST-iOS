@@ -6,7 +6,7 @@
             "body" : "Amos has joined the meeting"
         },
         "sound" : "default",
-        "badge" : 10,
+        "badge" : 1,
    },
     "duration": "Current time",
     "startedAt": "Meeting’s starting time"

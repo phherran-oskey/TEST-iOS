@@ -5,8 +5,6 @@
 //  Created by Pierre-Hugo HERRAN on 08/01/2025.
 //
 
-
-
 import UIKit
 import SwiftUI
 import UserNotifications
@@ -17,20 +15,41 @@ class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDele
         registerForNotifications()
         return true
     }
-    // Step 2. Ask the user's permission to show alert notifications by calling the `requestAuthorization` method.
 
+    // Step 2. Ask the user's permission to show alert notifications by calling the `requestAuthorization` method.
     func registerForNotifications() {
         UNUserNotificationCenter.current()
-            .requestAuthorization(options: [.alert, .sound, .badge]) {
-                granted, error in
+            .requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
                 print("Permission granted: \(granted)")
             }
+        UNUserNotificationCenter.current().delegate = self // Définir le délégué
     }
 
     // Step 3. Set up registration callback functions to check whether the registration fails or succeeds and display the notification.
-
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.banner, .sound])
+    }
+    
+    // Step 5. Schedule a local notification
+    func scheduleLocalNotification() {
+        let content = UNMutableNotificationContent()
+        content.title = "Notification Test"
+        content.body = "Ceci est une notification locale gratuite."
+        content.sound = .default
+
+        // Déclenchement dans 5 secondes
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+
+        // Créer la requête de notification
+        let request = UNNotificationRequest(identifier: "localNotification", content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("Erreur lors de l'ajout de la notification : \(error)")
+            } else {
+                print("Notification locale planifiée.")
+            }
+        }
     }
 }
 
@@ -43,6 +62,14 @@ struct TEST_iOSApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    // Exemple de déclenchement de notification lors de l'apparition de la vue
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        appDelegate.scheduleLocalNotification()
+                    }
+                }
         }
     }
 }
+
+
